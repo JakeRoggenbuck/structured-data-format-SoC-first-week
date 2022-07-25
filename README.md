@@ -10,7 +10,7 @@ Fork this repo and start your work in your fork of the project!
 ## Requirements
 - Write two paragraphs about your new data format (including two intentional design decisions and why)
 - Give three examples of this data format being used
-- Make a basic intepreter for this new file format and a library in any language with at least two functions ([loads](https://www.geeksforgeeks.org/json-loads-in-python/), [dumps](https://www.geeksforgeeks.org/json-dumps-in-python/)).
+- Make a basic interpreter for this new file format and a library in any language with at least two functions ([loads](https://www.geeksforgeeks.org/json-loads-in-python/), [dumps](https://www.geeksforgeeks.org/json-dumps-in-python/)).
   - Optionally add [load](https://www.geeksforgeeks.org/json-load-in-python/) and [dump](https://www.geeksforgeeks.org/json-dump-in-python/) (More info below)
 - Have fun and be creative, make this a real thing that you will use in the future
 
@@ -18,7 +18,7 @@ Fork this repo and start your work in your fork of the project!
 # Loads string of your new format into a native object
 obj = myformat.loads("text")
 
-# Write string of your format from native object
+# Write a string of your format from native object
 str = myformat.dumps(obj)
 ```
 
