@@ -29,4 +29,4 @@ str = myformat.dumps(obj)
 - https://www.geeksforgeeks.org/json-dumps-in-python/
 
 ### What is Summer of Code?
-Summer of Code is an initiative to encourage people to build cool and useful software over the summer.
+Summer of Code is an initiative to encourage people to build cool and useful software over the summer. And most importantly to learn and have fun!!
