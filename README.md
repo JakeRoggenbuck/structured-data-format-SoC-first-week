@@ -1,7 +1,7 @@
 # structured-data-format-SoC-first-week
 Summer Of Code (SoC) First Week - Structured Data Format
 
-## This weeks challenge
+## This week's challenge
 Build a new and unique structured data format similar to JSON or TOML with at least two intentional design decisions that improve upon some aspect of an existing data structure format.
 
 ## How to participate
