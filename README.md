@@ -6,9 +6,10 @@ Build a new and unique structured data format similar to JSON or TOML with at le
 
 ## Requirements
 - Write two paragraphs about your new data format (including two intentional design decisions and why)
-- Give an three examples of this data format being used
-- Make a basic intepreter for this new file format and a library in any language with two functions ([loads](https://www.geeksforgeeks.org/json-loads-in-python/), [dumps](https://www.geeksforgeeks.org/json-dumps-in-python/)).
-  - Optionally add [load](https://www.geeksforgeeks.org/json-load-in-python/) and [dump](https://www.geeksforgeeks.org/json-dump-in-python/)
+- Give three examples of this data format being used
+- Make a basic intepreter for this new file format and a library in any language with at least two functions ([loads](https://www.geeksforgeeks.org/json-loads-in-python/), [dumps](https://www.geeksforgeeks.org/json-dumps-in-python/)).
+  - Optionally add [load](https://www.geeksforgeeks.org/json-load-in-python/) and [dump](https://www.geeksforgeeks.org/json-dump-in-python/) (More info below)
+- Have fun and be creative, make this a real thing that you will use in the future
 
 ```py
 # Loads string of your new format into a native object
