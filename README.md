@@ -5,7 +5,8 @@ Summer Of Code (SoC) First Week - Structured Data Format
 Build a new and unique structured data format similar to JSON or TOML with at least two intentional design decisions that improve upon some aspect of an existing data structure format.
 
 ## How to participate
-Fork this repo and start your work in your fork of the project!
+- Fork this repo and start your work in your fork of the project!
+- Projects are due on Sunday the 31st at 9pm PDT.
 
 ## Requirements
 - Write two paragraphs about your new data format (including two intentional design decisions and why)
