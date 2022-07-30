@@ -1,7 +1,5 @@
 #[derive(PartialEq, Debug, Clone)]
 enum Tokens {
-    EOF,
-    DoubleQuote,
     SquareRight,
     SquareLeft,
     Bar,
@@ -10,7 +8,11 @@ enum Tokens {
     Equals,
     Greater,
     Dot,
-    None,
+
+    Identifier,
+    Int,
+    Float,
+    String,
 }
 
 #[derive(PartialEq, Debug)]
@@ -21,7 +23,6 @@ struct Token {
 
 fn tokenize(part: &str) -> Token {
     let token = match part {
-        "\"" => Tokens::DoubleQuote,
         "]" => Tokens::SquareRight,
         "[" => Tokens::SquareLeft,
         "|" => Tokens::Bar,
@@ -30,7 +31,19 @@ fn tokenize(part: &str) -> Token {
         "=" => Tokens::Equals,
         ">" => Tokens::Greater,
         "." => Tokens::Dot,
-        _ => Tokens::None,
+        _ => {
+            if part.contains("\"") {
+                Tokens::String
+            } else if is_part_numeric(part) {
+                if part.contains(".") {
+                    Tokens::Float
+                } else {
+                    Tokens::Int
+                }
+            } else {
+                Tokens::Identifier
+            }
+        }
     };
 
     return Token {
@@ -100,17 +113,6 @@ fn next(index: &mut usize, chars: &Vec<char>, lex_eof: &mut bool) -> Token {
         if !is_char_whitespace(current) {
             buffer.push(current);
 
-            if is_char_numeric(current) {
-                in_number = true;
-                *index += 1;
-                continue;
-            } else {
-                if in_number {
-                    *index += 1;
-                    return tokenize(&buffer);
-                }
-            }
-
             if current == '"' {
                 if in_string {
                     *index += 1;
@@ -123,9 +125,22 @@ fn next(index: &mut usize, chars: &Vec<char>, lex_eof: &mut bool) -> Token {
                 continue;
             }
 
-            if ends_token(current, next) {
-                *index += 1;
-                return tokenize(&buffer);
+            if !in_string {
+                if is_char_numeric(next) {
+                    in_number = true;
+                    *index += 1;
+                    continue;
+                } else {
+                    if in_number {
+                        *index += 1;
+                        return tokenize(&buffer);
+                    }
+                }
+
+                if ends_token(current, next) {
+                    *index += 1;
+                    return tokenize(&buffer);
+                }
             }
         }
 
@@ -135,7 +150,21 @@ fn next(index: &mut usize, chars: &Vec<char>, lex_eof: &mut bool) -> Token {
 
 fn main() {
     let mut index = 0;
-    let chrs: Vec<char> = "project() ( \"version\" => 0.1.0 )".chars().collect();
+    let chrs: Vec<char> = "
+project( \"version\" => \"0.1.0\" )
+
+langs[]
+  | \"Python\"
+  | \"Javascript\"
+  | \"Rust\"
+  | \"Java\"
+  | \"C\"
+  | \"Go\"
+
+packages[]
+  | ( \"rand\" => 4.0 )"
+    .chars()
+    .collect();
     let mut lex_eof = false;
 
     let mut current_token: Token;
