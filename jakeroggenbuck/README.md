@@ -10,7 +10,7 @@
 ### List
 ```py
 langs[]
-	| "Go"
-	| "Rust"
-	| "Python"
+  | "Go"
+  | "Rust"
+  | "Python"
 ```
