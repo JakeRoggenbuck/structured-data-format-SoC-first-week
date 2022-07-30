@@ -1,4 +1,4 @@
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Clone)]
 enum Tokens {
     SquareRight,
     SquareLeft,
@@ -62,13 +62,12 @@ fn test_structure(structure: &[Tokens], tokens: &Vec<Token>, index: &mut usize) 
 
         i += 1;
     }
-
     *index += structure.len();
 
     return true;
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Clone)]
 struct Value<T> {
     name: String,
     value: T,
@@ -256,6 +255,18 @@ fn main() {
                 name: stack[index - VALUE_STRING.len() + 1].part.clone(),
                 value: stack[index - VALUE_STRING.len() + 4].part.clone(),
             });
+
+            // for x in index..index + VALUE_STRING.len() {
+            //     stack.remove(x);
+            // }
+
+            // stack.insert(
+            //     index,
+            //     Token {
+            //         part: String::new(),
+            //         token: new.clone(),
+            //     },
+            // );
             index -= 1;
         } else if test_structure(VALUE_INT, &stack, &mut index) {
             new = Tokens::IntValue(Value {
