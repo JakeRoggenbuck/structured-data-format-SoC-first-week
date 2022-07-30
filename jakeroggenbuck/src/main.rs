@@ -15,6 +15,77 @@ enum Tokens {
     String,
 }
 
+static VALUE_STRING: &'static [Tokens] = &[
+    Tokens::ParenLeft,
+    Tokens::String,
+    Tokens::Equals,
+    Tokens::Greater,
+    Tokens::String,
+    Tokens::ParenRight,
+];
+
+static VALUE_FLOAT: &'static [Tokens] = &[
+    Tokens::ParenLeft,
+    Tokens::String,
+    Tokens::Equals,
+    Tokens::Greater,
+    Tokens::Float,
+    Tokens::ParenRight,
+];
+
+static VALUE_INT: &'static [Tokens] = &[
+    Tokens::ParenLeft,
+    Tokens::String,
+    Tokens::Equals,
+    Tokens::Greater,
+    Tokens::Int,
+    Tokens::ParenRight,
+];
+
+fn test_structure(structure: &[Tokens], tokens: &Vec<Token>, index: &mut usize) -> bool {
+    let mut i: usize = 0;
+
+    if structure.len() + *index + 1 > tokens.len() {
+        return false;
+    }
+
+    for s in structure {
+        print!("{:?} == {:?}", *s, tokens[*index + i].token);
+
+        if *s == tokens[*index + i].token {
+            println!(" True");
+        } else {
+            println!(" False");
+            return false;
+        }
+
+        i += 1;
+    }
+
+    *index += structure.len();
+
+    return true;
+}
+
+struct Value<T> {
+    name: String,
+    value: T,
+}
+
+struct Dict<T> {
+    key: String,
+    value: T,
+}
+
+struct ListItem<T> {
+    item: T,
+}
+
+struct List<T> {
+    name: String,
+    items: Vec<ListItem<T>>,
+}
+
 #[derive(PartialEq, Debug)]
 struct Token {
     part: String,
@@ -151,7 +222,7 @@ fn next(index: &mut usize, chars: &Vec<char>, lex_eof: &mut bool) -> Token {
 fn main() {
     let mut index = 0;
     let chrs: Vec<char> = "
-project( \"version\" => \"0.1.0\" )
+project() ( \"version\" => \"0.1.0\" )
 
 langs[]
   | \"Python\"
@@ -162,15 +233,29 @@ langs[]
   | \"Go\"
 
 packages[]
-  | ( \"rand\" => 4.0 )"
-    .chars()
-    .collect();
+  | ( \"rand\" => 4.0 ) "
+        .chars()
+        .collect();
     let mut lex_eof = false;
 
     let mut current_token: Token;
+    let mut stack = Vec::<Token>::new();
     while lex_eof == false {
         current_token = next(&mut index, &chrs, &mut lex_eof);
+        stack.push(current_token);
+    }
 
-        println!("{:?}", current_token);
+    index = 0;
+    loop {
+        if index + 1 == stack.len() {
+            break;
+        }
+
+        println!(
+            "string {}",
+            test_structure(VALUE_STRING, &stack, &mut index)
+        );
+
+        index += 1;
     }
 }
