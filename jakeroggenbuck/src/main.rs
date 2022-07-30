@@ -1,4 +1,4 @@
-#[derive(PartialEq, Debug, Clone)]
+#[derive(PartialEq, Debug)]
 enum Tokens {
     SquareRight,
     SquareLeft,
@@ -13,6 +13,10 @@ enum Tokens {
     Int,
     Float,
     String,
+
+    IntValue(Value<i64>),
+    FloatValue(Value<f64>),
+    StringValue(Value<String>),
 }
 
 static VALUE_STRING: &'static [Tokens] = &[
@@ -50,12 +54,9 @@ fn test_structure(structure: &[Tokens], tokens: &Vec<Token>, index: &mut usize) 
     }
 
     for s in structure {
-        print!("{:?} == {:?}", *s, tokens[*index + i].token);
-
+        // print!("{:?} == {:?}", *s, tokens[*index + i].token);
         if *s == tokens[*index + i].token {
-            println!(" True");
         } else {
-            println!(" False");
             return false;
         }
 
@@ -67,6 +68,7 @@ fn test_structure(structure: &[Tokens], tokens: &Vec<Token>, index: &mut usize) 
     return true;
 }
 
+#[derive(PartialEq, Debug)]
 struct Value<T> {
     name: String,
     value: T,
@@ -222,20 +224,17 @@ fn next(index: &mut usize, chars: &Vec<char>, lex_eof: &mut bool) -> Token {
 fn main() {
     let mut index = 0;
     let chrs: Vec<char> = "
-project() ( \"version\" => \"0.1.0\" )
+( \"version\" => \"0.1.0\" )
 
-langs[]
-  | \"Python\"
-  | \"Javascript\"
-  | \"Rust\"
-  | \"Java\"
-  | \"C\"
-  | \"Go\"
+( \"name\" => \"Jake\" )
 
-packages[]
-  | ( \"rand\" => 4.0 ) "
-        .chars()
-        .collect();
+( \"fav_num\" => 2.71828 )
+
+( \"rounded\" => 2 )
+
+"
+    .chars()
+    .collect();
     let mut lex_eof = false;
 
     let mut current_token: Token;
@@ -247,14 +246,37 @@ packages[]
 
     index = 0;
     loop {
-        if index + 1 == stack.len() {
+        if index + 1 > stack.len() {
             break;
         }
 
-        println!(
-            "string {}",
-            test_structure(VALUE_STRING, &stack, &mut index)
-        );
+        let mut new: Tokens = Tokens::Bar;
+        if test_structure(VALUE_STRING, &stack, &mut index) {
+            new = Tokens::StringValue(Value {
+                name: stack[index - VALUE_STRING.len() + 1].part.clone(),
+                value: stack[index - VALUE_STRING.len() + 4].part.clone(),
+            });
+            index -= 1;
+        } else if test_structure(VALUE_INT, &stack, &mut index) {
+            new = Tokens::IntValue(Value {
+                name: stack[index - VALUE_INT.len() + 1].part.clone(),
+                value: stack[index - VALUE_INT.len() + 4]
+                    .part
+                    .parse::<i64>()
+                    .unwrap(),
+            });
+            index -= 1;
+        } else if test_structure(VALUE_FLOAT, &stack, &mut index) {
+            new = Tokens::FloatValue(Value {
+                name: stack[index - VALUE_FLOAT.len() + 1].part.clone(),
+                value: stack[index - VALUE_FLOAT.len() + 4]
+                    .part
+                    .parse::<f64>()
+                    .unwrap(),
+            });
+            index -= 1;
+        }
+        println!("{:?}", new);
 
         index += 1;
     }
