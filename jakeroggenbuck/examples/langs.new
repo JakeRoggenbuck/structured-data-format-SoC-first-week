@@ -1,0 +1,7 @@
+langs[]
+  | "Python"
+  | "Javascript"
+  | "Rust"
+  | "Java"
+  | "C"
+  | "Go"
